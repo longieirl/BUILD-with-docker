@@ -1,6 +1,6 @@
 ### Install and Run SAP BUILD 
-
-https://github.com/SAP/BUILD
+BUILD is an open-source, cloud-based and social platform that enables users, even those with no UI development knowledge, to easily create fully interactive prototypes with realistic data, share them with colleagues and consolidate this feedback without writing a line of code.
+Link: https://github.com/SAP/BUILD
 
 ### Prerequisites
 - Ensure boot2docker is installed
