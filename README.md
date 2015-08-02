@@ -22,22 +22,22 @@ $ ./remoteSetup.sh
 
 ### Local Install
 
-1. Clone this repo
+- Clone this repo
 ```
 git clone https://github.com/longieirl/build-with-docker.git build-with-docker
 ```
 
-2. CD into build-with-docker and clone BUILD
+- CD into build-with-docker and clone BUILD
 ```
 git clone https://github.com/SAP/BUILD.git BUILD
 ```
 
-3. Run setup to install MongoDB Replica set and BUILD
+- Run setup to install MongoDB Replica set and BUILD
 ```
 $ ./start.sh
 ```
 
-4. Login
+- Login
 ```
 http://localhost:9000/login
 ```
