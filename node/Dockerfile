@@ -31,6 +31,7 @@ RUN export PYTHON=/usr/bin/python && \
     npm install -g node-gyp --msvs_version=2012 && \
     npm install -g nodemon && \
     npm install -g node-inspector@'^0.9.2'  && \
+    npm install -g grunt-contrib
     npm config set python /usr/bin/python && \
     node-gyp clean
 

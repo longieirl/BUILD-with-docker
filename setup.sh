@@ -114,7 +114,13 @@ docker run --rm -e PYTHON=/usr/bin/python -e GYP_MSVS_VERSION=2012 -v $PWD/BUILD
 docker run --rm --link build_DB_01:build_DB_01 -v $PWD/BUILD/BUILD:/app longieirl/node node server/initSchema.js
 docker run --rm --link build_DB_01:build_DB_01 -v $PWD/BUILD/BUILD:/app longieirl/node node server/setDefaultAccess.js
 docker run -itd -p 9000:9000 --name build-node -v $PWD/BUILD/BUILD:/app longieirl/node grunt serve
-sleep 120
+sleep 200
+
+echo ""
+echo "Enabling default ports..."
+echo ""
+VBoxManage controlvm boot2docker-vm natpf1 mongodb,tcp,,27017,,27017
+VBoxManage controlvm boot2docker-vm natpf1 build,tcp,,9000,,9000
 
 echo ""
 echo "#####################################"

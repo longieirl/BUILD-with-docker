@@ -20,6 +20,7 @@ RUN apt-get purge -y python.*
 RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys C01E1CAD5EA2C4F0B8E3571504C367C218ADD4FF
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
+		ruby \
 		git \
 		git-core \
 		curl \
