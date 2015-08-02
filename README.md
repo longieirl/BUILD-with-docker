@@ -72,3 +72,8 @@ gyp ERR! node-gyp -v v1.0.1
 gyp ERR! not ok 
 npm WARN optional dep failed, continuing x.509@0.1.4
 ```
+
+### TODO
+- Use docker-compose for creating containers i.e. using the scale option for the replica creation
+- Stop/start scripts to presist data between container restarts
+- Make node/npm versions configurable from docker run commands
