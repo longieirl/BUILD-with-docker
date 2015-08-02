@@ -109,18 +109,27 @@ python updateConfig.py $MONGODB1
 echo ""
 echo "Run and execute BUILD application..."
 echo ""
-docker run --rm -v $PWD/BUILD/BUILD:/app longieirl/node npm install
+# Adding -e here to make python available as env variable
+docker run --rm -e PYTHON=/usr/bin/python -e GYP_MSVS_VERSION=2012 -v $PWD/BUILD/BUILD:/app longieirl/node npm install
 docker run --rm --link build_DB_01:build_DB_01 -v $PWD/BUILD/BUILD:/app longieirl/node node server/initSchema.js
 docker run --rm --link build_DB_01:build_DB_01 -v $PWD/BUILD/BUILD:/app longieirl/node node server/setDefaultAccess.js
-docker run -it -p 9000:9000 --name build-node -v $PWD/BUILD/BUILD:/app longieirl/node grunt serve
+docker run -itd -p 9000:9000 --name build-node -v $PWD/BUILD/BUILD:/app longieirl/node grunt serve
+sleep 120
 
 echo ""
 echo "#####################################"
-echo "Connect to primary replica set via OS X:"
-echo "$ mongo $(boot2docker ip)":27017
+echo "Monitor BUILD coming online"
+echo "$ docker logs build-node"
+echo ""
+
 echo ""
 echo "#####################################"
-echo "Access database logs for all nodes:"
+echo "Connect to primary replica mongodb instance via OS X:"
+echo "$ mongo $(boot2docker ip)":27017
+echo ""
+
+echo "#####################################"
+echo "Access database logs for all mongodb nodes:"
 echo "$ docker exec -it build-data-mongo bash"
 echo "$ tail -f /log/mongodb/mongoReplica-01.log"
 echo "$ tail -f /log/mongodb/mongoReplica-02.log"

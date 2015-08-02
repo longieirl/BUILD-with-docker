@@ -5,53 +5,83 @@
 # Base
 FROM ubuntu:14.04
 
-MAINTAINER Build Team
-
-RUN apt-get update
-RUN apt-get update --fix-missing
-RUN apt-get update --fix-missing
-
-# Update packages
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
-	apt-get update -qqy && \  
-	apt-get -qqy install ca-certificates openssl make gcc curl wget vim git git-core && \
-	apt-get clean autoclean && \  
-	apt-get autoremove && \  
-  	apt-get update && \  
-    rm -rf /var/lib/apt/lists/*
-
-# Cleanup
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-RUN apt-get autoremove -y
+MAINTAINER jlongieirl@gmail.com
 
 # Set environment variables
 ENV HOME /root
 ENV LANG C.UTF-8
-ENV LC_ALL en_US.UTF-8
-ENV NODE_VERSION 0.10.38
-ENV NPM_VERSION 1.4.28
 RUN locale-gen en_US.UTF-8
+ENV PYTHON_VERSION 2.7.10
+ENV PYTHON_PIP_VERSION 7.1.0
 
-# Install Node
-RUN cd /opt && \
-    wget http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz && \
-    tar -xzf node-v$NODE_VERSION-linux-x64.tar.gz && \
-    mv node-v$NODE_VERSION-linux-x64 node && \
-    cd /usr/local/bin && \
-    ln -s /opt/node/bin/* . && \
-    rm -f /opt/node-v$NODE_VERSION-linux-x64.tar.gz && \
-    PATH=/usr/bin/node:$PATH
+RUN apt-get update
+RUN apt-get update --fix-missing
+RUN apt-get purge -y python.*
+RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys C01E1CAD5EA2C4F0B8E3571504C367C218ADD4FF
 
-# Configure node
-RUN node -v && \
-    npm -v && \
-    npm install -g grunt-cli  && \
-    npm install -g nodemon && \
-    npm cache clear
+RUN apt-get update && apt-get install -y --no-install-recommends \
+		git \
+		git-core \
+		curl \
+		perl \
+		wget \
+		ca-certificates \
+		autoconf \
+		automake \
+		bzip2 \
+		file \
+		g++ \
+		gcc \
+		libbz2-dev \
+		libc6-dev \
+		libcurl4-openssl-dev \
+		libevent-dev \
+		libffi-dev \
+		libglib2.0-dev \
+		libjpeg-dev \
+		liblzma-dev \
+		libmagickcore-dev \
+		libmagickwand-dev \
+		libmysqlclient-dev \
+		libncurses-dev \
+		libpq-dev \
+		libreadline-dev \
+		libsqlite3-dev \
+		libssl-dev \
+		libtool \
+		libwebp-dev \
+		libxml2-dev \
+		libxslt-dev \
+		libyaml-dev \
+		make \
+		patch \
+		xz-utils \
+		zlib1g-dev \
+	&& rm -rf /var/lib/apt/lists/*
 
-# Define working directory.
+RUN set -x \
+	&& mkdir -p /usr/src/python \
+	&& curl -SL "https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tar.xz" -o python.tar.xz \
+	&& curl -SL "https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tar.xz.asc" -o python.tar.xz.asc \
+	&& gpg --verify python.tar.xz.asc \
+	&& tar -xJC /usr/src/python --strip-components=1 -f python.tar.xz \
+	&& rm python.tar.xz* \
+	&& cd /usr/src/python \
+	&& ./configure --enable-shared --enable-unicode=ucs4 \
+	&& make -j$(nproc) \
+	&& make install \
+	&& ldconfig \
+	&& curl -SL 'https://bootstrap.pypa.io/get-pip.py' | python \
+	&& pip install --no-cache-dir --upgrade pip==$PYTHON_PIP_VERSION \
+	&& find /usr/local \
+		\( -type d -a -name test -o -name tests \) \
+		-o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
+		-exec rm -rf '{}' + \
+	&& rm -rf /usr/src/python
+
+# Define working directory
 WORKDIR /root
 
-# Define default command.
+# Define default command
 CMD ["bash"]
 
