@@ -19,6 +19,7 @@ $ curl -o remoteSetup.sh https://raw.githubusercontent.com/longieirl/build-with-
 $ chmod 755 remoteSetup.sh
 $ ./remoteSetup.sh
 ```
+Note: this entire process can take up to 20mins depending on network connection
 
 ### Local Install
 
@@ -27,7 +28,7 @@ $ ./remoteSetup.sh
 git clone https://github.com/longieirl/build-with-docker.git build-with-docker
 ```
 
-- CD into build-with-docker and clone BUILD
+- cd into build-with-docker and clone BUILD
 ```
 git clone https://github.com/SAP/BUILD.git BUILD
 ```
@@ -40,6 +41,10 @@ $ ./start.sh
 - Login
 ```
 http://localhost:9000/login
+```
+Note: if the server does not come up watch the logs 
+```sh
+$ docker logs build-node
 ```
 
 ### Errors
