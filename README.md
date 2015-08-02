@@ -1,17 +1,23 @@
-### Install and Run SAP BUILD 
+### Introduction
+This repo will configure the SAP BUILD application using a three node MongoDB replica set. BUILD is based on the MEAN stack so the
+entire stack is exposed via Docker containers with a central data store for managing logs and data between ALL MongoDB nodes.
 
-https://github.com/SAP/BUILD
+Reference: http://docs.mongodb.org/manual/core/replication-introduction/
+
+### Overview of BUILD
+BUILD is an open-source, cloud-based and social platform that enables users, even those with no UI development knowledge, to easily create fully interactive prototypes with realistic data, share them with colleagues and consolidate this feedback without writing a line of code.
+Reference: https://github.com/SAP/BUILD
 
 ### Prerequisites
-- Tested on OS X
-- boot2docker 1.7 is installed
-- git is installed from the cli
+- Currently only tested on OS X
+- boot2docker 1.7 is installed and available from the cli
+- git is installed and available from the cli
 - The following ports are not bound on your host
 ```
 9000 - BUILD App
 27017 - MongoDB
 ```
-- setup.sh script will automatically add the ports to your boot2docker vm ```boot2docker-vm```
+- setup.sh script will automatically add the ports to your boot2docker vm ```boot2docker-vm``` assuming you havent changed the default boot2docker vm name
 
 ### Remote Install
 Download and install in one go!
