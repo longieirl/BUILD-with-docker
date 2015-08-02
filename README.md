@@ -2,10 +2,10 @@
 
 https://github.com/SAP/BUILD
 
-Ensure boot2docker is installed
-Ensure git is installed
-
-Enable port forwarding on VirtualBox for the following ports: 
+### Prerequisites
+- Ensure boot2docker is installed
+- Ensure git is installed from the cli
+- Enable port forwarding on VirtualBox for the following ports:
 ```
 9000 - BUILD App
 27017 - MongoDB
@@ -15,9 +15,7 @@ Enable port forwarding on VirtualBox for the following ports:
 Download and install in one go!
 
 ```
-$ curl -o remoteSetup.sh https://raw.githubusercontent.com/longieirl/build-with-docker/master/remoteSetup.sh
-$ chmod 755 remoteSetup.sh
-$ ./remoteSetup.sh
+$ curl https://raw.githubusercontent.com/longieirl/build-with-docker/master/remoteSetup.sh | bash
 ```
 Note: this entire process can take up to 20mins depending on network connection
 
@@ -25,12 +23,13 @@ Note: this entire process can take up to 20mins depending on network connection
 
 - Clone this repo
 ```
-git clone https://github.com/longieirl/build-with-docker.git build-with-docker
+$ git clone https://github.com/longieirl/build-with-docker.git build-with-docker
 ```
 
-- cd into build-with-docker and clone BUILD
+- Change into BUILD directory and clone BUILD
 ```
-git clone https://github.com/SAP/BUILD.git BUILD
+$ cd build-with-docker
+$ git clone https://github.com/SAP/BUILD.git BUILD
 ```
 
 - Run setup to install MongoDB Replica set and BUILD
@@ -39,10 +38,11 @@ $ ./start.sh
 ```
 
 - Login
+Open URL using chrome, the recommended browser for SAP BUILD
 ```
 http://localhost:9000/login
 ```
-Note: if the server does not come up watch the logs 
+Note: if the server does not come up, watch the logs to see what is happening
 ```sh
 $ docker logs build-node
 ```
@@ -58,7 +58,7 @@ cd BUILD/BUILD/
 npm install
 ```
 
-If you get a node-gyp rebuild error, the install will work! Still looking to resolve this issue
+If you get a node-gyp rebuild error, the install will still work! Looking to resolve this issue!
 ```sh
 gyp ERR! configure error 
 gyp ERR! stack Error: spawn ENOENT
