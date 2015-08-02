@@ -73,7 +73,8 @@ npm WARN optional dep failed, continuing x.509@0.1.4
 ```
 
 ### TODO
-- Automate entire setup using vagrant/fig
-- Use docker-compose for creating containers i.e. using the scale option for the replica creation
-- Stop/start scripts to persist data between container restarts, all data is lost each time setup.sh is run
-- Make the various dockerfiles, scripts etc...more configurable
+- [ ] Automate entire setup using vagrant/fig
+- [ ] Use docker-compose for creating containers i.e. using the scale option for the replica creation
+- [ ] Stop/start scripts to persist data between container restarts, all data is lost each time setup.sh is run
+- [ ] Make the various dockerfiles, scripts etc...more configurable i.e. taking NPM version as a parameter 
+- [ ] Hosting this on AWS and other cloud solutions
