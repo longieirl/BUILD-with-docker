@@ -34,7 +34,7 @@ $ git clone https://github.com/SAP/BUILD.git BUILD
 
 - Run setup to install MongoDB Replica set and BUILD
 ```
-$ ./start.sh
+$ ./setup.sh
 ```
 
 - Login
@@ -48,11 +48,11 @@ $ docker logs build-node
 ```
 
 ### Errors
-If you get the following error, just run ./start.sh again. This is an issue with the version of NPM - all the modules that were previously downloaded will still be availble.
+If you get the following error, just run ./setup.sh again. This is an issue with the version of NPM - all the modules that were previously downloaded will still be availble.
 ```
 path /root/.npm/a58c529b-oot-npm-lodash-2-4-2-package-tgz.lock
 ```
-Note: if you have npm installed on your command line then you can manually run this step yourself and then ./start.sh again
+Note: if you have npm installed on your command line then you can manually run this step yourself and then ./setup.sh again
 ```sh
 cd BUILD/BUILD/
 npm install
