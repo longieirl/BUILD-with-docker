@@ -4,8 +4,8 @@
 # Note: http://docs.mongodb.org/ecosystem/platforms/amazon-ec2/
 #
 
-# Base
-FROM longieirl/build-base
+# Base image
+FROM longieirl/base
 
 MAINTAINER jlongieirl@gmail.com
 

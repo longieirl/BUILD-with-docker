@@ -1,8 +1,9 @@
 #
-# Data volume Dockerfile
+# MongoDB Data volume Dockerfile
 #
-# Base
-FROM longieirl/build-base
+
+# Base image
+FROM longieirl/base
 
 MAINTAINER jlongieirl@gmail.com
 
