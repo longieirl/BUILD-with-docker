@@ -79,9 +79,16 @@ gyp ERR! not ok
 npm WARN optional dep failed, continuing x.509@0.1.4
 ```
 
+- You can ignore this error if the ports are already configured on your virtualbox
+```sh
+VBoxManage: error: A NAT rule for this host port and this host IP already exists
+```
+
 ### TODO
-- [ ] Automate entire setup using vagrant/fig
+- [ ] Better way of managing host names per instance
+- [ ] Use docker-swarm for managing docker instances https://github.com/docker/swarm/
 - [ ] Use docker-compose for creating containers i.e. using the scale option for the replica creation
+- [ ] Automate entire setup using vagrant/fig
 - [ ] Stop/start scripts to persist data between container restarts, all data is lost each time setup.sh is run
 - [ ] Make the various dockerfiles, scripts etc...more configurable i.e. taking NPM version as a parameter 
 - [ ] Hosting this on AWS and other cloud solutions
