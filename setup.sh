@@ -27,7 +27,7 @@
 $(boot2docker shellinit)
 
 echo ""
-echo "Stopping and removing existing containers.."
+echo "Stopping and removing existing containers..."
 echo ""
 containers=( build-DB-01 build-DB-02 build-arbiter build-data-mongo build-node)
 for c in ${containers[@]}; do
@@ -37,7 +37,7 @@ done
 
 echo ""
 echo "Building VM's from Dockerfiles..."
-echo "- comment out these lines if you want to use existing image tags"
+echo "- comment out these lines if you want to use different image tags"
 echo ""
 # Build docker data volumes - Single Responsibility Principle (SRP)
 docker build -t longieirl/base base/
@@ -98,7 +98,7 @@ EOM
 echo ""
 echo "Update BUILD configuration file with MongoDB primary node..."
 echo ""
-python updateConfig.py $MONGODB1
+python updateConfig.py 'BUILD/BUILD/server/config.json' $MONGODB1
 
 echo ""
 echo "Run and execute BUILD application..."
