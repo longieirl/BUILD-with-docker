@@ -20,16 +20,24 @@ RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/dow
 	&& rm /usr/local/bin/gosu.asc \
 	&& chmod +x /usr/local/bin/gosu
 
-ENV MONGO_RELEASE_FINGERPRINT DFFA3DCF326E302C4787673A01C4E7FAAAB2461C
-RUN gpg --keyserver pool.sks-keyservers.net --recv-keys $MONGO_RELEASE_FINGERPRINT
-ENV MONGO_VERSION 2.6.7
+# gpg: key 7F0CEB10: public key "Richard Kreuter <richard@10gen.com>" imported
+RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys 492EAFE8CD016A07919F1D2B9ECBEC467F0CEB10
 
-# Install MongoDB
-RUN curl -SL "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-$MONGO_VERSION.tgz" -o mongo.tgz \
-    && curl -SL "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-$MONGO_VERSION.tgz.sig" -o mongo.tgz.sig \
-    && gpg --verify mongo.tgz.sig \
-    && tar -xvf mongo.tgz -C /usr/local --strip-components=1 \
-    && rm mongo.tgz*
+ENV MONGO_MAJOR 3.0
+ENV MONGO_VERSION 3.0.5
+
+RUN echo "deb http://repo.mongodb.org/apt/debian wheezy/mongodb-org/$MONGO_MAJOR main" > /etc/apt/sources.list.d/mongodb-org.list
+
+RUN set -x \
+	&& apt-get update \
+	&& apt-get install -y \
+		mongodb-org=$MONGO_VERSION \
+		mongodb-org-server=$MONGO_VERSION \
+		mongodb-org-shell=$MONGO_VERSION \
+		mongodb-org-mongos=$MONGO_VERSION \
+		mongodb-org-tools=$MONGO_VERSION \
+	&& rm -rf /var/lib/apt/lists/* \
+	&& rm -rf /var/lib/mongodb
 
 # Expose ports.
 #   - 27017: process
