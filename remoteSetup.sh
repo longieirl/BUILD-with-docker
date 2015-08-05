@@ -5,6 +5,5 @@
 # #####################################
 git clone https://github.com/longieirl/build-with-docker.git build-with-docker
 cd build-with-docker
-git clone https://github.com/SAP/BUILD.git BUILD
-chmod 755 setup.sh
-./setup.sh
+chmod 755 /build-node/run.sh
+./build-node/run.sh

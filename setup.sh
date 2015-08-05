@@ -27,6 +27,14 @@
 $(boot2docker shellinit)
 
 echo ""
+echo "Setting default params..."
+echo ""
+MONOGO_VERSION=2.6.0
+MONOGO_PORT=27017
+BUILD_VERSION=0.1.0
+BUILD_PORT=9000
+
+echo ""
 echo "Stopping and removing existing containers..."
 echo ""
 containers=( build-DB-01 build-DB-02 build-arbiter build-data-mongo build-node)
@@ -57,11 +65,11 @@ echo ""
 # With three members, majority required to vote is 2, fault tolerance is 1. 
 # Note: later we add arbiter which only casts votes
 # Refer: http://docs.mongodb.org/manual/core/replica-set-architecture-four-members/
-docker run -itd -p 27017:27017 --name build-DB-01 --volumes-from build-data-mongo --detach --publish-all longieirl/mongo mongod --config /conf/mongo.conf --dbpath /data/mongo-01 --logpath /log/mongoReplica-01.log
-docker run -itd --name build-DB-02 --volumes-from build-data-mongo --detach --publish-all longieirl/mongo mongod --config /conf/mongo.conf --dbpath /data/mongo-02 --logpath /log/mongoReplica-02.log
+docker run -itd -p $MONOGO_PORT:$MONOGO_PORT --name build-DB-01 --volumes-from build-data-mongo --detach --publish-all longieirl/mongo:$MONOGO_VERSION mongod --config /conf/mongo.conf --dbpath /data/mongo-01 --logpath /log/mongoReplica-01.log
+docker run -itd --name build-DB-02 --volumes-from build-data-mongo --detach --publish-all longieirl/mongo:$MONOGO_VERSION mongod --config /conf/mongo.conf --dbpath /data/mongo-02 --logpath /log/mongoReplica-02.log
 
 # Adding arbiter as the majority of the members must be accissible for an election to take place
-docker run -itd --name build-arbiter -p 30000:30000 --volumes-from build-data-mongo --detach --publish-all longieirl/mongo mongod --dbpath /data/arb --config /conf/mongo-arb.conf --logpath /log/arbiter.log
+docker run -itd --name build-arbiter -p 30000:30000 --volumes-from build-data-mongo --detach --publish-all longieirl/mongo:$MONOGO_VERSION mongod --dbpath /data/arb --config /conf/mongo-arb.conf --logpath /log/arbiter.log
 
 echo ""
 echo "Getting IP addresses of Mongo instances..."
@@ -107,15 +115,15 @@ echo ""
 docker run --rm -v $PWD/BUILD/BUILD:/app -e PYTHON=/usr/bin/python -e GYP_MSVS_VERSION=2012 longieirl/node npm install
 docker run --rm -v $PWD/BUILD/BUILD:/app longieirl/node node server/initSchema.js
 docker run --rm -v $PWD/BUILD/BUILD:/app longieirl/node node server/setDefaultAccess.js
-docker run -itd -v $PWD/BUILD/BUILD:/app -p 9000:9000 --link build-DB-01:build-DB-01 --name build-node longieirl/node grunt serve
+docker run -itd -v $PWD/BUILD/BUILD:/app -p $BUILD_PORT:$BUILD_PORT --link build-DB-01:build-DB-01 --name build-node longieirl/node grunt serve
 # This step can take up to 2mins, it builds the CSS, sprites etc...
 sleep 200
 
 echo ""
-echo "Enabling BUILD [9000] and MongoDB [27017] ports..."
+echo "Enabling BUILD and MongoDB ports..."
 echo ""
 VBoxManage controlvm boot2docker-vm natpf1 mongodb-script,tcp,,27017,,27017
-VBoxManage controlvm boot2docker-vm natpf1 build-script,tcp,,9000,,9000
+VBoxManage controlvm boot2docker-vm natpf1 build-script,tcp,,$BUILD_PORT,,$BUILD_PORT
 
 echo ""
 echo "#####################################"
@@ -126,7 +134,7 @@ echo ""
 echo ""
 echo "#####################################"
 echo "Connect to MongoDB replica set:"
-echo "$ mongo $(boot2docker ip)":27017
+echo "$ mongo $(boot2docker ip)":$MONGO_PORT
 echo ""
 
 echo "#####################################"

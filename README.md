@@ -13,12 +13,15 @@ Reference: https://github.com/SAP/BUILD
 - Currently only tested on OS X
 - boot2docker 1.7 is installed and available from the cli
 - git is installed and available from the cli
-- The following ports are not bound on your host
+- MongoDB 2.6.* / 3.0.*
+- NPM 1.4.* / 2.11.*
+- The following ports are available on your host
 ```
 9000 - BUILD App
 27017 - MongoDB
 ```
-- setup.sh script will automatically add the ports to your boot2docker vm ```boot2docker-vm``` assuming you havent changed the default boot2docker vm name
+Note: the scripts can be configured to use different ports if required
+- setup.sh script will automatically add the ports to your boot2docker vm ```boot2docker-vm``` assuming you haven't changed the default boot2docker vm name
 
 ### Remote Install
 Download and install in one go!
@@ -26,10 +29,9 @@ Download and install in one go!
 ```
 $ curl https://raw.githubusercontent.com/longieirl/build-with-docker/master/remoteSetup.sh | bash
 ```
-Note: this entire process can take up to 20mins depending on network connection and CPU power....be patient!
+Note: this entire process can take up to 10-15mins depending on network connection and CPU power....be patient!
 
-### Local Install
-
+### Local Install - Step 1
 - Clone the setup repo
 ```
 $ git clone https://github.com/longieirl/build-with-docker.git build-with-docker
@@ -41,11 +43,16 @@ $ cd build-with-docker
 $ git clone https://github.com/SAP/BUILD.git BUILD
 ```
 
+### Local Install - Step 2
+This setup will build the Docker images locally, build distribution folder and then run BUILD
+
 - Run setup to install MongoDB Replica set and BUILD
 ```
 $ ./setup.sh
 ```
 Note: you may need to run this one or twice if you experience any of the errors below. Until BUILD is bumped to the latest version of NodeJS and NPM this is a problem.
+
+### Local Install - Step 3
 
 - Login
 Open URL using Chrome, the recommended browser for SAP BUILD
