@@ -159,8 +159,15 @@ sleep 200
 echo ""
 echo "Enabling BUILD and MongoDB ports..."
 echo ""
-VBoxManage controlvm boot2docker-vm natpf1 mongodb-script,tcp,,27017,,27017
-VBoxManage controlvm boot2docker-vm natpf1 build-script,tcp,,$BUILD_PORT,,$BUILD_PORT
+
+# Not needed when on linux
+if [ -z `which VBoxManage` ]
+	then
+		VBoxManage controlvm boot2docker-vm natpf1 mongodb-script,tcp,,27017,,27017
+		VBoxManage controlvm boot2docker-vm natpf1 build-script,tcp,,$BUILD_PORT,,$BUILD_PORT
+	else
+		echo "Skipped because no 'VBoxManage' found (not needed on linux)"
+fi
 
 echo ""
 echo "#####################################"
