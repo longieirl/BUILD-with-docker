@@ -24,6 +24,23 @@
 # boot2docker ssh 'sudo /etc/init.d/docker restart'
 # --tlsverify=false should never be a recommended workaround
 
+# Get parameters (http://stackoverflow.com/questions/1922490)
+for i in "$@"
+do
+case $i in
+    --force-rebuild)
+    paramForceRebuild=true
+    shift # past argument with no value
+    ;;
+    *)
+        # unknown option
+        echo "Unknown parameter '$i'"
+        exit 1
+    ;;
+esac
+done
+
+# Check for docker or boot2docker
 if [ ! -z `which boot2docker` ]
 	then
 		# Init docker environment on Mac and Windows
@@ -64,7 +81,7 @@ images=( "base" "mongo" "mongo-data" "node" )
 for image in "${images[@]}"
 do
 	imageExists=`docker images | grep longieirl/$image`
-	if [ -z "$imageExists" ]
+	if [ -z "$imageExists" ] || [ ! -z "$paramForceRebuild" ]
 		then
 			echo "Building image longieirl/$image..."
 			docker build -t longieirl/$image $image/
