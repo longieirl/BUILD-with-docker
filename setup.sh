@@ -24,7 +24,18 @@
 # boot2docker ssh 'sudo /etc/init.d/docker restart'
 # --tlsverify=false should never be a recommended workaround
 
-$(boot2docker shellinit)
+if [ ! -z `which boot2docker` ]
+	then
+		# Init docker environment on Mac and Windows
+		$(boot2docker shellinit)
+	else
+		if [ -z `which docker` ]
+			then
+				echo "Neither docker nor boot2docker found"
+				echo "Please check your PATH"
+				exit 127
+		fi
+fi
 
 echo ""
 echo "Setting default params..."
