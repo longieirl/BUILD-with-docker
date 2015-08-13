@@ -59,10 +59,19 @@ echo "Building VM's from Dockerfiles..."
 echo "- comment out these lines if you want to use different image tags"
 echo ""
 # Build docker data volumes - Single Responsibility Principle (SRP)
-docker build -t longieirl/base base/
-docker build -t longieirl/mongo mongo/
-docker build -t longieirl/mongo-data mongo-data/
-docker build -t longieirl/node node/
+# Don't rebuild if base images already exist
+images=( "base" "mongo" "mongo-data" "node" )
+for image in "${images[@]}"
+do
+	imageExists=`docker images | grep longieirl/$image`
+	if [ -z "$imageExists" ]
+		then
+			echo "Building image longieirl/$image..."
+			docker build -t longieirl/$image $image/
+		else
+			echo "Skipping buildnig longieirl/$image because it already exists"
+	fi
+done
 
 echo ""
 echo "Build data container for mongo i.e. logs/journal/data..."
