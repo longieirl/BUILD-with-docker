@@ -10,8 +10,8 @@ BUILD is an open-source, cloud-based and social platform that enables users, eve
 Reference: https://github.com/SAP/BUILD
 
 ### Prerequisites
-- Currently only tested on OS X
-- boot2docker 1.7 is installed and available from the cli
+- Currently tested on OS X and Ubuntu 14.04
+- boot2docker 1.7 (OS X) or docker (Ubuntu) is installed and available from the cli
 - git is installed and available from the cli
 - MongoDB 2.6.* / 3.0.*
 - NPM 1.4.* / 2.11.*
