@@ -24,7 +24,35 @@
 # boot2docker ssh 'sudo /etc/init.d/docker restart'
 # --tlsverify=false should never be a recommended workaround
 
-$(boot2docker shellinit)
+# Get parameters (http://stackoverflow.com/questions/1922490)
+for i in "$@"
+do
+case $i in
+    --force-rebuild)
+    paramForceRebuild=true
+    shift # past argument with no value
+    ;;
+    *)
+        # unknown option
+        echo "Unknown parameter '$i'"
+        exit 1
+    ;;
+esac
+done
+
+# Check for docker or boot2docker
+if [ ! -z `which boot2docker` ]
+	then
+		# Init docker environment on Mac and Windows
+		$(boot2docker shellinit)
+	else
+		if [ -z `which docker` ]
+			then
+				echo "Neither docker nor boot2docker found"
+				echo "Please check your PATH"
+				exit 127
+		fi
+fi
 
 echo ""
 echo "Setting default params..."
@@ -48,10 +76,19 @@ echo "Building VM's from Dockerfiles..."
 echo "- comment out these lines if you want to use different image tags"
 echo ""
 # Build docker data volumes - Single Responsibility Principle (SRP)
-docker build -t longieirl/base base/
-docker build -t longieirl/mongo mongo/
-docker build -t longieirl/mongo-data mongo-data/
-docker build -t longieirl/node node/
+# Don't rebuild if base images already exist
+images=( "base" "mongo" "mongo-data" "node" )
+for image in "${images[@]}"
+do
+	imageExists=`docker images | grep longieirl/$image`
+	if [ -z "$imageExists" ] || [ ! -z "$paramForceRebuild" ]
+		then
+			echo "Building image longieirl/$image..."
+			docker build -t longieirl/$image $image/
+		else
+			echo "Skipping buildnig longieirl/$image because it already exists"
+	fi
+done
 
 echo ""
 echo "Build data container for mongo i.e. logs/journal/data..."
@@ -122,8 +159,15 @@ sleep 200
 echo ""
 echo "Enabling BUILD and MongoDB ports..."
 echo ""
-VBoxManage controlvm boot2docker-vm natpf1 mongodb-script,tcp,,27017,,27017
-VBoxManage controlvm boot2docker-vm natpf1 build-script,tcp,,$BUILD_PORT,,$BUILD_PORT
+
+# Not needed when on linux
+if [ -z `which VBoxManage` ]
+	then
+		VBoxManage controlvm boot2docker-vm natpf1 mongodb-script,tcp,,27017,,27017
+		VBoxManage controlvm boot2docker-vm natpf1 build-script,tcp,,$BUILD_PORT,,$BUILD_PORT
+	else
+		echo "Skipped because no 'VBoxManage' found (not needed on linux)"
+fi
 
 echo ""
 echo "#####################################"
